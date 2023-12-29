@@ -306,3 +306,38 @@ function crearUsuario() {
 
 type Usuario = ReturnType<typeof crearUsuario>  // <- ✅ TS reconoce los tipos que retorna la función
 ```
+
+## Arrays
+
+Teniendo en cuenta la inferencia, podría verse normal inicializar una variable como un array y que TS lo tome como tipo array, pero hay un problema en este caso. TS lo infiere como tipo never, es decir que siempre debe estar vacío.
+
+```ts
+const lenguajes = []
+lenguajes.push('Javascript') // <- ❌ TS no permite indices ya que es tipo never
+```
+
+Para este caso es posible especificarle el tipo, por ejemplo:
+
+```ts
+const lenguajes: string[] = [] // <- ✅ Los contenidos del array son de tipo string
+
+ // ✅ TS permite indices pero SOLO strings
+lenguajes.push('Javascript')
+lenguajes.push('PHP')
+lenguajes.push('Python')
+
+lenguajes.push(3) // <- ❌
+```
+
+Otra forma de especificarlo es de la siguiente manera:
+
+```ts
+const lenguajes: Array<string> = [] // <- ✅ Los contenidos del array son de tipo string
+```
+
+Ahora para varios tipos en un array, la forma de especificarlo sería así:
+
+```ts
+const lenguajes: (string | number)[] = [] // <- ✅ Los contenidos del array son de tipo string o number
+```
+
