@@ -43,6 +43,12 @@ Es un lenguaje de programación de **[código abierto](https://github.com/micros
 | `unknown`   | Similar a `any`, pero más seguro. Requiere verificar el tipo antes de su uso.   | `let unknownValue: unknown;`                                           |
 | `never`     | Para valores que nunca deben ocurrir.                                           | `function error(message: string): never { throw new Error(message); }` |
 
+Es posible usar el operador | para indicar que puede ser de un tipo u otro:
+
+```ts
+let text: number | string;
+```
+
 ## Inferencia
 
 ```ts
@@ -121,3 +127,86 @@ function infiniteLoop(): never {
     while (true) {}
 }
 ```
+
+## Los Type Alias
+
+Los alias de tipo en TypeScript son una forma de **crear un nuevo nombre para un tipo existente**. Se podría considerar como darle un apodo a un tipo. Esto puede ser útil cuando se trabaja con tipos complejos que **podría ser reutilizado en el código**. Al utilizar un alias de tipo, puedes mejorar la legibilidad y mantener el código más limpio, por ejemplo:
+
+```ts
+  type Usuario = {
+      nombre: string;
+      email: string;
+      fechaNacimiento: Date;
+  };
+
+  function imprimirUsuario(usuario: Usuario) {
+      console.log(`
+        Nombre: ${usuario.nombre}, 
+        Email: ${usuario.email}, 
+        Fecha de Nacimiento: ${usuario.fechaNacimiento}
+      `);
+  }
+
+  let usuario1: Usuario = {
+      nombre: 'Juan',
+      email: 'juan@example.com',
+      fechaNacimiento: new Date(1990, 1, 1)
+  };
+
+  imprimirUsuario(usuario1);
+```
+
+### Optional Properties
+
+Es posible tener *Optional Properties* (propiedades opcionales) simplemente añadiendo el signo de interrogación, en el siguiente ejemplo se crea un segundo usuario pero sin la fecha de nacimiento, sin este interrogante Typescript mostraría errores:
+
+```ts
+  type Usuario = {
+      nombre: string;
+      email: string;
+      fechaNacimiento?: Date;
+  };
+
+  let usuario2: Usuario = {
+      nombre: 'Juan',
+      email: 'juan@example.com',
+  };
+```
+
+### Read Only
+
+También es posible establecer una propiedad como *Read Only* (Sólo lectura), es decir no es posible editar el valor de la propiedad.
+
+```ts
+  type Usuario = {
+      readonly id: number;
+      nombre: string;
+      email: string;
+      fechaNacimiento?: Date;
+  };
+```
+
+### Template union types
+
+Con los Tipos de unión de plantilla podemos hacer que un valor siga un patrón y asignarle un tipo a cada parte de la plantilla.
+
+```ts
+type UsuarioID = `${string}-${string}-${string}-${string}-${string}`
+
+type Usuario = {
+    readonly id?: UsuarioID; // <- ✅ Asignamos el template union type
+    nombre: string;
+    email: string;
+    fechaNacimiento: Date;
+};
+```
+
+Otro caso es por ejemplo los colores hexadecimales.
+
+```ts
+type HexadecimalColor = `#${string}`
+
+const color: HexadecimalColor = `0033ff`    // <- ❌
+const color2: HexadecimalColor = `#0033ff`  // <- ✅
+```
+
