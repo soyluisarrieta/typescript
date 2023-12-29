@@ -229,3 +229,23 @@ type Usuario = {
 Usuario.country = 'Venezuela'   // <- ❌
 Usuario.country = 'España'      // <- ✅
 ```
+
+### Interception types
+
+Crear un nuevo tipo en base a otros tipos usando el operador &
+
+```ts
+type Usuario = {
+    readonly id?: UsuarioID;
+    nombre: string;
+    fechaNacimiento: Date;
+    country: UsuarioCountry;
+}
+
+type Credentials = {
+    email: string;
+    password: string;
+}
+
+type Admin = Usuario & Credentials // <- ✅ Fusionamos dos o más tipos 
+```
