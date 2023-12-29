@@ -341,3 +341,43 @@ Ahora para varios tipos en un array, la forma de especificarlo sería así:
 const lenguajes: (string | number)[] = [] // <- ✅ Los contenidos del array son de tipo string o number
 ```
 
+### Matrices y tuplas
+
+Para indicar el tipo para las matrices es tan sencillo como especificar que es un array de arrys:
+
+```ts
+const gameBoard: string[][] = [  // <- ✅ 
+  ['X' , ''  ,'O'],
+  [''  , 'O' ,'X'],
+  ['O' , 'O' ,'X'],
+]
+```
+
+pero podría definirse cualquier string, para indicar que solo reciba ciertos caracteres podemos usar los [Union types](#union-types) y limitar el array con las tuplas para que sea un Tic Tac Toe de 3x3:
+
+```ts
+type CellValue = 'X' | 'O' | ''
+type GameBoard = [
+  [CellValue, CellValue, CellValue],
+  [CellValue, CellValue, CellValue],
+  [CellValue, CellValue, CellValue]
+]
+
+const gameBoard: GameBoard = [  
+  ['X' , ''  ,'O'],
+  [''  , 'O' ,'X'],
+  ['O' , 'O' ,'X'],
+]
+```
+
+Otros ejemplos sobre tuplas:
+
+```ts
+type State = [string, (newName: string) => void]
+const [hero, setHero]: State = useState('Hulk')
+
+// ---
+
+type RGB = [number, number, number]
+const colorRGB: RGB = [255, 53, 23]
+```
