@@ -268,3 +268,30 @@ const direccionUsuario: Usuario['direccion'] = {
     calle: '45'
 }
 ```
+
+### Type from value
+
+Con `typeof` en Typescript, es como un "supraconjunto" con el que puedo crear un nuevo tipo a parti de un valor.
+
+```ts
+
+const direccionUsuario = {
+    carrera: '123b',    // <- Tipo string
+    calle: 45           // <- Tipo number
+}
+
+type Direccion = typeof direccionUsuario
+
+const direccionAdmin1: Direccion = {
+    carrera: 33,                   // <- ❌ TS reconoce que el tipo debe ser string
+    calle: true                    // <- ❌ TS reconoce que el tipo debe ser number
+}
+
+const direccionAdmin2: Direccion = {
+    carrera: '123b',               // <- ✅ TS reconoce que es de tipo string
+    calle: 45                      // <- ✅ TS reconoce que es de tipo number
+}
+
+
+
+```
