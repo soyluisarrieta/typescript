@@ -249,3 +249,22 @@ type Credentials = {
 
 type Admin = Usuario & Credentials // <- ✅ Fusionamos dos o más tipos 
 ```
+
+### Type indexing
+
+Permite reutilizar partes de un tipo, es decir, solo alguna propiedad en lugar de todas
+
+```ts
+type Usuario = {
+    nombre: string;
+    direccion: {
+      carrera: string,
+      calle: string
+    };
+}
+
+const direccionUsuario: Usuario['direccion'] = {
+    carrera: '123',
+    calle: '45'
+}
+```
