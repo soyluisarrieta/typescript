@@ -47,6 +47,7 @@ Es posible usar el operador | para indicar que puede ser de un tipo u otro:
 
 ```ts
 let text: number | string;
+let text2: string | 2;
 ```
 
 ## Inferencia
@@ -210,3 +211,21 @@ const color: HexadecimalColor = `0033ff`    // <- ❌
 const color2: HexadecimalColor = `#0033ff`  // <- ✅
 ```
 
+### Union types
+
+Indicar que una variable puede contener uno u otra cadena de texto.
+
+```ts
+type UsuarioCountry = 'Colombia' | 'México' | 'Estados Unidos' | 'España'
+
+type Usuario = {
+    readonly id?: UsuarioID;
+    nombre: string;
+    email: string;
+    fechaNacimiento: Date;
+    country: UsuarioCountry;     // <- ✅ Asignamos el union type
+};
+
+Usuario.country = 'Venezuela'   // <- ❌
+Usuario.country = 'España'      // <- ✅
+```
