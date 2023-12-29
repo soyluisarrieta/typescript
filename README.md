@@ -271,13 +271,12 @@ const direccionUsuario: Usuario['direccion'] = {
 
 ### Type from value
 
-Con `typeof` en Typescript, es como un "supraconjunto" con el que puedo crear un nuevo tipo a parti de un valor.
+Con `typeof` en Typescript, es como un "supraconjunto" con el que puedo crear un nuevo tipo a partir de un valor.
 
 ```ts
-
 const direccionUsuario = {
     carrera: '123b',    // <- Tipo string
-    calle: 45           // <- Tipo number
+    calle: 45           // <- Tipo string
 }
 
 type Direccion = typeof direccionUsuario
@@ -291,7 +290,19 @@ const direccionAdmin2: Direccion = {
     carrera: '123b',               // <- ✅ TS reconoce que es de tipo string
     calle: 45                      // <- ✅ TS reconoce que es de tipo number
 }
+```
 
+### Type from function return
 
+En este caso no lo toma a partir de un valor sino de lo que retorne una función.
 
+```ts
+function crearUsuario() {
+  return {
+    nombre: 'Luis Arrieta',
+    edad: 27
+  }
+}
+
+type Usuario = ReturnType<typeof crearUsuario>  // <- ✅ TS reconoce los tipos que retorna la función
 ```
