@@ -509,3 +509,40 @@ function mostrarMensaje(tipoDeError) {
 #### enum vs const enums
 
 Se prefiere `const enum` para optimizar el tamaño del código, ya que se resuelven en tiempo de compilación. Sin embargo, si los enums se van a utilizar fuera de la aplicación, como en APIs externas, es mejor usar `enum` regulares, dado que se traducen en objetos en tiempo de ejecución.
+
+## Aserciones de tipos
+
+Las aserciones de tipo en TypeScript son una forma de decirle al compilador "confía en mí, sé lo que estoy haciendo". Es como una conversión de tipo en otros lenguajes, pero no realiza ninguna comprobación especial o reestructuración de datos. No tiene impacto en tiempo de ejecución, y el compilador lo usa únicamente para la verificación de tipos.
+
+```ts
+let algunaVariable: any = "Hola, soy una cadena";
+
+// Uso de aserción de tipo para tratar 'algunaVariable' como una cadena
+let longitudDeCadena: number = (algunaVariable as string).length;
+```
+
+```ts
+const canvas = document.querySelector('canvas') as HTMLCanvasElement // <- Confía que es un Canvas
+const contexto = canvas.getContext('2d') 
+```
+
+En este caso, no es una buena idea usar aserciones debido a que podría ocultar errores evidentes y potencialmente dañinos. Aquí está lo que está ocurriendo con cada línea de código, como por ejemplo:
+
+- **Canvas no encontrado:** document.querySelector('canvas') puede retornar null.
+- **Contexto no soportado:** getContext('2d') o getContext('webgl') puede retornar null.
+- **Dimensiones del canvas no definidas:** puede causar problemas al dibujar.
+- **Uso incorrecto de los métodos del contexto:** puede resultar en dibujos inesperados.
+- **Problemas de rendimiento:** dibujar en el canvas puede ser costoso en términos de rendimiento.
+- **Compatibilidad con navegadores antiguos:** no todos los navegadores soportan el elemento canvas.
+
+Lo ideal sería usar JS y dejar que TS infiera los tipos:
+
+```ts
+const canvas = document.querySelector('canvas')
+
+if (canvas instanceof HTMLCanvasElement) {
+  const contexto = canvas.getContext('2d') 
+}
+```
+
+Este código es correcto porque primero selecciona un elemento canvas del documento. Luego, antes de intentar usar el método `getContext('2d')`, verifica que `canvas` sea realmente una instancia de `HTMLCanvasElement`. Esto evita errores en tiempo de ejecución al intentar llamar a `getContext('2d')` en caso de que canvas sea `null`.
