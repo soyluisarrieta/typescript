@@ -381,3 +381,131 @@ const [hero, setHero]: State = useState('Hulk')
 type RGB = [number, number, number]
 const colorRGB: RGB = [255, 53, 23]
 ```
+
+## Objetos
+
+### Enums
+
+En TS, lo mejor sería usar Enums:
+
+```ts
+enum ERROR_TYPES {
+  NOT_FOUND,
+  UNAUTHORIZED,
+  FORBIDDEN
+}
+
+function mostrarMensaje (tipoDeError: ERROR_TYPES) {
+  if (tipoDeError === ERROR_TYPES.NOT_FOUND){
+    console.log('No se encuentra el recurso')
+  } else if (tipoDeError === ERROR_TYPES.UNATHORIZED){
+    console.log('No tienes permisos para acceder')
+  } else if (tipoDeError === ERROR_TYPES.FORBIDDEN){
+    console.log('No tienes permisos para acceder')
+  }
+}
+```
+
+Así es como TS lo transforma a JS:
+
+```js
+var ERROR_TYPES;
+(function (ERROR_TYPES) {
+  ERROR_TYPES[ERROR_TYPES["NOT_FOUND"] = 0] = "NOT_FOUND";
+  ERROR_TYPES[ERROR_TYPES["UNAUTHORIZED"] = 1] = "UNAUTHORIZED";
+  ERROR_TYPES[ERROR_TYPES["FORBIDDEN"] = 2] = "FORBIDDEN";
+})(ERROR_TYPES || (ERROR_TYPES = {}));
+
+function mostrarMensaje(tipoDeError) {
+  if (tipoDeError === ERROR_TYPES.NOT_FOUND) {
+    console.log('No se encuentra el recurso');
+  } else if (tipoDeError === ERROR_TYPES.UNAUTHORIZED) {
+    console.log('No tienes permisos para acceder');
+  } else if (tipoDeError === ERROR_TYPES.FORBIDDEN) {
+    console.log('No tienes permisos para acceder');
+  }
+}
+```
+
+Como puedes ver, el enumerador Typescript se ha transformado en una función de autoinvocación que crea y manipula un objeto llamado `ERROR_TYPES`. En este objeto, cada clave de enum se convierte en una propiedad con un valor numérico, y cada valor numérico se convierte en una propiedad con una clave de enum como valor.
+
+#### Enums constantes
+
+```ts
+const enum ERROR_TYPES {
+  NOT_FOUND,
+  UNAUTHORIZED,
+  FORBIDDEN
+}
+
+function mostrarMensaje (tipoDeError: ERROR_TYPES) {
+  if (tipoDeError === ERROR_TYPES.NOT_FOUND){
+    console.log('No se encuentra el recurso')
+  } else if (tipoDeError === ERROR_TYPES.UNAUTHORIZED){
+    console.log('No tienes permisos para acceder')
+  } else if (tipoDeError === ERROR_TYPES.FORBIDDEN){
+    console.log('No tienes permisos para acceder')
+  }
+}
+```
+
+```ts
+function mostrarMensaje(tipoDeError) {
+  if (tipoDeError === 0 /* NOT_FOUND */) {
+    console.log('No se encuentra el recurso');
+  } else if (tipoDeError === 1 /* UNAUTHORIZED */) {
+    console.log('No tienes permisos para acceder');
+  } else if (tipoDeError === 2 /* FORBIDDEN */) {
+    console.log('No tienes permisos para acceder');
+  }
+}
+```
+
+Como puedes ver, los miembros de `ERROR_TYPES` se han reemplazado en línea con sus valores correspondientes en el código JavaScript generado. 
+
+Los comentarios `/* NOT_FOUND \*/`, `/* UNAUTHORIZED \*/` y `/* FORBIDDEN */` sólo están ahí para facilitar la lectura del código y no se incluirían en la salida final de la compilación de TypeScript a JavaScript.
+
+#### Con un valor especifico
+
+```ts
+enum ERROR_TYPES {
+  NOT_FOUND = 'NO_ENCONTRADO',
+  UNAUTHORIZED = 'NO_AUTORIZADO',
+  FORBIDDEN = 'PROHIBIDO'
+}
+
+function mostrarMensaje (tipoDeError: ERROR_TYPES) {
+  if (tipoDeError === ERROR_TYPES.NOT_FOUND){
+    console.log('No se encuentra el recurso')
+  } else if (tipoDeError === ERROR_TYPES.UNAUTHORIZED){
+    console.log('No tienes permisos para acceder')
+  } else if (tipoDeError === ERROR_TYPES.FORBIDDEN){
+    console.log('No tienes permisos para acceder')
+  }
+}
+```
+
+Y a JS quedaría:
+
+```js
+var ERROR_TYPES;
+(function (ERROR_TYPES) {
+  ERROR_TYPES["NOT_FOUND"] = "NOT_FOUND";
+  ERROR_TYPES["UNAUTHORIZED"] = "UNAUTHORIZED";
+  ERROR_TYPES["FORBIDDEN"] = "FORBIDDEN";
+})(ERROR_TYPES || (ERROR_TYPES = {}));
+
+function mostrarMensaje(tipoDeError) {
+  if (tipoDeError === ERROR_TYPES.NOT_FOUND) {
+    console.log('No se encuentra el recurso');
+  } else if (tipoDeError === ERROR_TYPES.UNAUTHORIZED) {
+    console.log('No tienes permisos para acceder');
+  } else if (tipoDeError === ERROR_TYPES.FORBIDDEN) {
+    console.log('No tienes permisos para acceder');
+  }
+}
+```
+
+#### enum vs const enums
+
+Se prefiere `const enum` para optimizar el tamaño del código, ya que se resuelven en tiempo de compilación. Sin embargo, si los enums se van a utilizar fuera de la aplicación, como en APIs externas, es mejor usar `enum` regulares, dado que se traducen en objetos en tiempo de ejecución.
