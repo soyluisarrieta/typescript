@@ -546,3 +546,30 @@ if (canvas instanceof HTMLCanvasElement) {
 ```
 
 Este código es correcto porque primero selecciona un elemento canvas del documento. Luego, antes de intentar usar el método `getContext('2d')`, verifica que `canvas` sea realmente una instancia de `HTMLCanvasElement`. Esto evita errores en tiempo de ejecución al intentar llamar a `getContext('2d')` en caso de que canvas sea `null`.
+
+## Interfaces
+
+Tanto las interfaces como los alias de tipo en TypeScript nos permiten darle un nombre a un tipo de objeto, pero se usan de manera un poco diferente.
+
+Las interfaces son como un plano que define cómo debería ser un objeto. Son útiles cuando queremos asegurarnos de que un objeto tenga una cierta forma.
+
+```ts
+interface Punto {
+    x: number;
+    y: number;
+}
+```
+
+### Diferencia entre Interfaces y Types aliases
+
+La principal diferencia es que las interfaces son más útiles para definir la forma de los objetos, mientras que los alias de tipo son más flexibles y pueden usarse con cualquier tipo de valor. Algunas otras diferencias son:
+
+| Característica                      | Interfaces                                                              | Type Aliases                                                                                   |
+| ----------------------------------- | ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Extensiones                         | Pueden ser extendidas y fusionadas.                                     | No pueden ser extentidos o fusionados.                                                         |
+| Tipos primitivos y literales        | No pueden representar tipos primitivos.                                 | Pueden representar tipos primitivos, como `number`,`string`,`boolean`.                         |
+| Usos de Uniones y tipos de utilidad | Tienen retricciones en su uso con uniones de tipos y tipos de utilidad. | Pueden utilizarse con uniones de tipos y tipos de utilidad (como `Partial<t>` o `Readonly<t>`) |
+| Declaraciones duplicadas            | Pueden tener múltiples declaraciones y se fusionarán automáticamente.   | No puede tener declaraciones duplicadas.                                                       |
+| Sintaxis                            | Usa la palabra clave `Interface`                                        | Usa la palabra clave `type`                                                                    |
+
+**La recomendación es usar** `Interfaces` cuando se trata de programación orientado a objetos y **`Types aliases` siempre que se pueda**.
